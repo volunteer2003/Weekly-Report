@@ -265,6 +265,30 @@
       return callback(new Response(1, "success", result));
     });
   };
+  
+  exports.getUserName = function(userId, callback) {
+    var client;
+	var userName = null;
+    client = utils.createClient();
+    return client.hgetall("users", function(err, users) {
+      var key, property, result, value, _, _ref;
+      if (err) {
+        return utils.showDBError(callback, client);
+      }
+      result = false;
+      client.quit();
+      for (key in users) {
+        value = users[key];
+        _ref = key.split(":"), _ = _ref[0], property = _ref[1];
+        if (property === "user_name" && _ === userId) {
+		  userName = value;
+		  console.log('usersModel-getUserName userName:' + userName);
+          break;
+        }
+      }
+      return callback(userName);
+    });
+  };
 
   exports.changePassword = function(userId, newPassword, oldPassword, callback) {
     var client;

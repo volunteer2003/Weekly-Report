@@ -169,7 +169,8 @@
     data["isAdmin"] = utils.isAdmin(req);
 	data["userId"] = userId;
 	data["dateStr"] = req.body.date;
-	data["userName"] = req.body.userName;
+	//data["userName"] = req.body.userName;
+	
 	if (!data["dateStr"]) {
 		data["dateStr"] = dateStr;
 	}
@@ -190,11 +191,15 @@
 		return reportModel.getReportContent(req, function(result) {
 			console.log('reportCtr-reportModel.getReportContent result:' + result);
 			if (result) {
-				data["content"] = result;
+			  data["content"] = result;
 			}
-			return res.render(pageTitle, data);
+			
+			// parse the userName for userId
+			return userModel.getUserName(userId, function(userName) {
+			  data["userName"] = userName;	
+			  return res.render(pageTitle, data);
+			});	
 		});
-        
 	  });
     });
   };
