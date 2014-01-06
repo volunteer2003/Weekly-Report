@@ -72,17 +72,21 @@
 
   window.reportvm = reportvm;
 
-  $("div.pagination").on("click", "button.pageNext", function() {
-    gotoPage(reportvm.currentPage() + 1);
+  $("div.pagination").on("click", "button.weekNext", function() {
+	console.log('button.weekNext click');
+	gotoPage(reportvm.currentPage() - 1);   // find the reports for the week before this week
     return false;
   });
 
-  $("div.pagination").on("click", "button.pagePre", function() {
-    gotoPage(reportvm.currentPage() - 1);
+  $("div.pagination").on("click", "button.weekPre", function() {
+	console.log('button.weekPre click');
+	gotoPage(reportvm.currentPage() + 1);  // find the reports for the week after this week
+	
     return false;
   });
 
   window.gotoPage = function(page) {
+    console.log('window.gotoPage :' + page);
     reportvm.currentPage(page);
     return getReports(reportvm.userId());
   };

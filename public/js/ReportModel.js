@@ -40,7 +40,8 @@
     };
 
     ReportModel.getReports = function(data, callback) {
-      return $.post("/getreports", data, function(response) {
+      console.log('ReportModel.getReports');
+	  return $.post("/getreports", data, function(response) {
         return callback(response);
       }, "json");
     };

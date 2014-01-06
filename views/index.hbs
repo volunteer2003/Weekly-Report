@@ -28,7 +28,7 @@
         {{/if}}
     </ul>
 </header>
-<div id="dialog-confirm" title="Edit report" style="display:none">
+<div id="dialog-confirm" title="Show report" style="display:none">
     <p>Are you sure to delete the report?</p>
 	<label for="dateTxt">Date:</label>
 	<input readonly id="dateTxt" type="text" required="required"
@@ -41,6 +41,16 @@
 	</textarea>	
 		
 </div>
+<div class="pagination">
+<table border="0">
+	<tr>
+		<td><button class="btn btn-mini weekPre" title="上一页" data-bind="visible: currentPage()<1">&lt;&lt;</button></td>
+		<td>&nbsp;&nbsp;<i class="icon-calendar"></i> {{dateStr}} &nbsp;&nbsp;</td>
+		<td><button class="btn btn-mini weekNext" title="下一页">&gt;&gt;</button></td>		
+	</tr>
+</table>	
+</div>
+
 <section class="container">
     <article id="reportList" >
         <ul class="unstyled" data-bind="foreach: reports">

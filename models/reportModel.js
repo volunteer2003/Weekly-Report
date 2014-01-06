@@ -341,16 +341,18 @@
 	
     end = (numOfPage * page) - 1;
 	//console.log('reportModel-getReportsAll userId:' + userId);
-	//console.log('reportModel-getReportsAll page:' + page);
+	console.log('reportModel-getReportsAll page1111111111111111111111111111111111111111111111111111111111111:' + page);
 	//console.log('reportModel-getReportsAll numOfPage:' + numOfPage);
 	//console.log('reportModel-getReportsAll end:' + end);
 	
-	var dateStr = getDateStr(new Date());
-	
+	var dateStr;
+
 	// init the dateStr, change the page will change the dateStr
 	if (page == '1') {
-		
-	} 
+		dateStr = getDateStr(new Date());	
+	} else {
+		dateStr = getDateStr1(new Date(), page);
+	}
 	
 	console.log('reportModel-getReportsAll dateStr:' + dateStr);
 	

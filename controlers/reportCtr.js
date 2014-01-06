@@ -255,16 +255,22 @@
 	var userAllFlag = '0';
 	userAllFlag = req.body.userAllFlag;
 	console.log('reportCtr-getReports-userAllFlag:' + userAllFlag);
+	var page = '0';
+	page = req.body.page;
+	console.log('reportCtr-getReports-page:' + page);
 		
     if (!userId) {
       userId = req.session.userId;
     }
+	console.log('reportCtr-getReports-userId:' + userId);
     numOfPage = req.body.numOfPage;
     try {
-      check(page).isNumeric().min(1);
-      check(page).isNumeric().min(1);
+	  console.log('reportCtr-getReports-userId111:' + userId);
+      //check(page).isNumeric().min(1);
+      //check(page).isNumeric().min(1);
 	  
 	  if(userAllFlag == '1') {
+	    
 		return reportModel.getReportsAll(userId, page, numOfPage, function(response) {
           return res.send(response);
         });

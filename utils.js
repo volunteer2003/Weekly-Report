@@ -82,6 +82,24 @@
     return client;
   };
   
+  getDateStr1 = function(date, page) {
+	var month, today, year, day;
+
+	date = new Date();
+	day_new = new Date();
+	
+	console.log('utils-getDateStr1 page:' + page);
+	
+	day_new.setDate(date.getDate() - date.getDay() + (page - 1)*7);
+	year = day_new.getFullYear();
+    month = day_new.getMonth() + 1;
+	day = day_new.getDate();
+	console.log('utils-getDateStr1 return: ' + year + '-' + month + '-' + day);	
+		
+	return "" + year + "-" + month + "-" + day;
+  }
+  
+  
   getDateStr = function(date) {
       var month, today, year, day;
 	  var month_first, day_first, year_first; // for calc the first day and the last day of the week
