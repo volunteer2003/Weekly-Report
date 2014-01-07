@@ -225,7 +225,7 @@
         if ((_ref = value.node) == null) {
           value.node = 0;
         }
-        linode = "<li id='" + value.id + "node" + value.node + "'><div id='" + value.id + "' class='page'><i class='icon-user'></i><span class='nodename'>" + value.label + "</span><span class='review btn btn-warning'>查看</span></div></div></li>";
+        linode = "<li id='" + value.id + "node" + value.node + "'><div id='" + value.id + "' class='page'><i class='icon-user'></i><span class='nodename'>" + value.label + "</span><span class='review btn btn-warning'>more</span></div></div></li>";
         if (value.node === 1) {
           linode = "<li id='" + value.id + "node" + value.node + "'><div id='" + value.id + "' class='node'><i class='icon-circle-arrow-down' /><i class='icon-book'></i><span class='nodename'>" + value.label + "</span></div></div></li>";
         }

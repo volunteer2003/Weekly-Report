@@ -170,12 +170,10 @@
     data["isAdmin"] = utils.isAdmin(req);
 	data["userId"] = userId;
 	data["dateStr"] = req.body.date;
-	//data["userName"] = req.body.userName;
 	
 	if (!data["dateStr"]) {
 		data["dateStr"] = dateStr;
 	}
-	
 	
 	console.log('reportCtr-showPage dateStr:' + data["dateStr"]);
     return userModel.hasSubordinate(userId, function(result) {
@@ -204,7 +202,15 @@
 	  });
     });
   };
-
+	
+  exports.showsubordinatesummaryIndex = function(req, res) {
+	if (!utils.authenticateUser(req, res)) {
+      return;
+    }
+    //return res.redirect("/show");
+	return showPage(req, res, "showsubordinatesummary");
+  }	
+  
   exports.showsubordinateIndex = function(req, res) {
     var userId;
     if (!utils.authenticateUser(req, res)) {
@@ -270,8 +276,16 @@
       //check(page).isNumeric().min(1);
       //check(page).isNumeric().min(1);
 	  
-	  if(userAllFlag == '1') {
-	    
+	  var hasSubordinate = req.body.hasSubordinate;
+	  
+	  if(hasSubordinate == '1') {
+		// get all the subordinates' reports
+		return reportModel.getReportsAllSub(userId, page, numOfPage, function(response) {
+          return res.send(response);
+        });
+	  }
+	  
+	  if(userAllFlag == '1') {	    
 		return reportModel.getReportsAll(userId, page, numOfPage, function(response) {
           return res.send(response);
         });

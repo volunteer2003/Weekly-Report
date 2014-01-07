@@ -25,6 +25,7 @@
 	//app.get('/show_all', report.showAllIndex);
     app.post('/getsubordinateuseranddepartment', report.getSubordinateUserAndDepartment);
     app.get('/showsubordinate', report.showsubordinateIndex);
+	app.get('/showsubordinatesummary', report.showsubordinatesummaryIndex);
     app.post('/getreports', report.getReports);
     app.post('/getreportnum', report.getReportNum);
     app.get('/login', user.loginIndex);

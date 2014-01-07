@@ -334,6 +334,109 @@
     });
   };
 
+  exports.getReportsAllSub = function(userId, page, numOfPage, callback) {
+    var client, end, start;
+    client = utils.createClient();
+    start = numOfPage * (page - 1);
+    if (start < 0) {
+      start = 0;
+    }
+	
+    end = (numOfPage * page) - 1;
+	//console.log('reportModel-getReportsAllSub userId:' + userId);
+	console.log('reportModel-getReportsAll page:' + page);
+	//console.log('reportModel-getReportsAllSub numOfPage:' + numOfPage);
+	//console.log('reportModel-getReportsAllSub end:' + end);
+	
+	var dateStr;
+
+	// init the dateStr, change the page will change the dateStr
+	if (page == '1') {
+		dateStr = getDateStr(new Date());	
+	} else {
+		dateStr = getDateStr1(new Date(), page);
+	}
+	
+	console.log('reportModel-getReportsAllSub dateStr:' + dateStr);
+	
+	var response = [];
+	var response_new = [];
+	//get one subordinate first and the find the right departmentId
+	return getSubordinateId(userId, function(subordinateId) {
+	  userId = subordinateId;
+	  console.log('reportModel-getReportsAllSub getSubordinateId:' + userId);
+	return getDepartmentId(userId, function(departmentId) {
+	  console.log('reportModel-getReportsAllSub departmentId:' + departmentId);
+	  return getColleagues(departmentId, function(usersIdList) {	
+	    console.log('reportModel-getReportsAllSub usersIdList:' + usersIdList);
+		  return getUsersNameList(usersIdList, function(usersNameList) {
+		    console.log('reportModel-getReportsAllSub usersNameList:' + usersNameList); 
+			return getReportsWeek(departmentId, dateStr, function(response) {
+		      // need to sequence the userLists to show in the main page
+		      var usersName = usersNameList.sort();
+			  console.log('reportModel-getReportsAllSub usersNameList:' + usersName);
+			  var userExistFalg = '0'; 
+			  for (var x in usersName) {
+			    userExistFalg = '0'; 
+				for (var y in response) {
+			      if (response[y].name == usersName[x]) {
+					userExistFalg = '1';
+					console.log('reportModel-getReportsAllSub userExistFalg:1:' + usersName[x]);
+				    response_new.push({
+                      id: response[y].id,
+                      date: response[y].date,
+                      content: response[y].content	
+			        });
+			      }
+			    }
+				
+				// for the user who had not completed the report in the department
+				if (userExistFalg == '0') {
+				  console.log('reportModel-getReportsAllSub userExistFalg:0:' + usersName[x]);
+				  response_new.push({
+                    id: '0',
+                    date: usersName[x],
+                    content: 'Not update the report yet!'	 
+			      });
+				}
+		      }
+		      return callback(new Response(1, 'success', response_new));
+		    });
+		  });
+	  });
+	}); 
+	});
+  };
+  
+  getSubordinateId = function(userId, callback) {
+    var client;
+    client = utils.createClient();
+	
+	return client.hgetall("users", function(err, reply) {
+		if (err) {
+          return utils.showDBError(callback, client);
+        }
+		
+		var result = false;
+		var childOfKey, key, value;
+		var subordinateId;
+		for (key in reply) {
+		  value = reply[key];
+          childOfKey = key.split(":");
+		  
+		  if (childOfKey[1] == 'superior_id') {
+			if (value == userId	) {
+			  subordinateId = childOfKey[0];
+			  
+			  console.log('reportModel-getSubordinateId subordinateId:' + subordinateId);					
+			}
+		  }	
+		}
+		return callback(subordinateId);
+	});	
+  
+  };
+	
   exports.getReportsAll = function(userId, page, numOfPage, callback) {
     var client, end, start;
     client = utils.createClient();

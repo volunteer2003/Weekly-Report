@@ -17,7 +17,8 @@
         <li ><a href="/write">This week</a></li>
         <li class="active"><a href="/show">My reports</a></li>
         {{#if hasSubordinate}}
-        <li ><a href="/showsubordinate">My teams'</a></li>
+        <li ><a href="/showsubordinate">My teams</a></li>
+		<li ><a href="/showsubordinatesummary">Team summary</a></li>
         {{/if}}
         <li ><a href="/password">Setting</a></li>
         {{#if isAdmin}}
@@ -49,14 +50,14 @@
                 <p class="date"><i class="icon-calendar"></i><span data-bind="text: date"></span></p>
                 <div class="content" data-bind="html: content"></div>
                 <!-- <p class="btn btn-link reply" data-bind="attr: {reportId: id}">reply</p> -->
-				<p class="btn btn-link delete" data-bind="attr: {dateStr: date, reportId: id, content: content}">edit</p>
+				<!-- <p class="btn btn-link delete" data-bind="attr: {dateStr: date, reportId: id, content: content}">edit</p> -->
             </li>
         </ul>
         <div class="pagination" data-bind="if: pageNum() > 1">
-            <button class="btn btn-mini pagePre" title="上一页"
+            <button class="btn btn-mini pagePre" title="pagePre"
                     data-bind="visible: currentPage()>1">&lt;&lt;</button>
             <span data-bind="text: currentPage() + '/' + pageNum()"></span>
-            <button class="btn btn-mini pageNext" title="下一页"
+            <button class="btn btn-mini pageNext" title="pageNext"
                     data-bind="visible: currentPage() < pageNum()">&gt;&gt;</button>
         </div>
     </article>
