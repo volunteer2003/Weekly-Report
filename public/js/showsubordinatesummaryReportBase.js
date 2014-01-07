@@ -77,7 +77,8 @@
       numOfPage: NUMOFPAGE,
       userId: userId,
 	  userAllFlag: '1',	  // show the all this weeks' report in main page
-	  hasSubordinate: '1' // has Subordinate flag
+	  hasSubordinate: '1' // has Subordinate flag, 
+						  //then will get the subordinate's userId and departmentId, finally show the subordinates' reports in the page
     };
     return ReportModel.getReports(data, function(response) {
       if (response.state === 0) {

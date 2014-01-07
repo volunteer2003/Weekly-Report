@@ -334,6 +334,7 @@
     });
   };
 
+  // get all the subordinates' reports for the manager
   exports.getReportsAllSub = function(userId, page, numOfPage, callback) {
     var client, end, start;
     client = utils.createClient();
@@ -349,7 +350,6 @@
 	//console.log('reportModel-getReportsAllSub end:' + end);
 	
 	var dateStr;
-
 	// init the dateStr, change the page will change the dateStr
 	if (page == '1') {
 		dateStr = getDateStr(new Date());	
@@ -365,46 +365,46 @@
 	return getSubordinateId(userId, function(subordinateId) {
 	  userId = subordinateId;
 	  console.log('reportModel-getReportsAllSub getSubordinateId:' + userId);
-	return getDepartmentId(userId, function(departmentId) {
-	  console.log('reportModel-getReportsAllSub departmentId:' + departmentId);
-	  return getColleagues(departmentId, function(usersIdList) {	
-	    console.log('reportModel-getReportsAllSub usersIdList:' + usersIdList);
-		  return getUsersNameList(usersIdList, function(usersNameList) {
-		    console.log('reportModel-getReportsAllSub usersNameList:' + usersNameList); 
-			return getReportsWeek(departmentId, dateStr, function(response) {
-		      // need to sequence the userLists to show in the main page
-		      var usersName = usersNameList.sort();
-			  console.log('reportModel-getReportsAllSub usersNameList:' + usersName);
-			  var userExistFalg = '0'; 
-			  for (var x in usersName) {
-			    userExistFalg = '0'; 
-				for (var y in response) {
-			      if (response[y].name == usersName[x]) {
-					userExistFalg = '1';
-					console.log('reportModel-getReportsAllSub userExistFalg:1:' + usersName[x]);
-				    response_new.push({
-                      id: response[y].id,
-                      date: response[y].date,
-                      content: response[y].content	
-			        });
+	  return getDepartmentId(userId, function(departmentId) {
+	    console.log('reportModel-getReportsAllSub departmentId:' + departmentId);
+	    return getColleagues(departmentId, function(usersIdList) {	
+	      console.log('reportModel-getReportsAllSub usersIdList:' + usersIdList);
+		    return getUsersNameList(usersIdList, function(usersNameList) {
+		      console.log('reportModel-getReportsAllSub usersNameList:' + usersNameList); 
+		      return getReportsWeek(departmentId, dateStr, function(response) {
+		        // need to sequence the userLists to show in the main page
+		        var usersName = usersNameList.sort();
+			    console.log('reportModel-getReportsAllSub usersNameList:' + usersName);
+			    var userExistFalg = '0'; 
+			    for (var x in usersName) {
+  			      userExistFalg = '0'; 
+				  for (var y in response) {
+  			        if (response[y].name == usersName[x]) {
+					  userExistFalg = '1';
+					  console.log('reportModel-getReportsAllSub userExistFalg:1:' + usersName[x]);
+				      response_new.push({
+                        id: response[y].id,
+                        date: response[y].date,
+                        content: response[y].content	
+			          });
+			        }
 			      }
-			    }
 				
-				// for the user who had not completed the report in the department
-				if (userExistFalg == '0') {
-				  console.log('reportModel-getReportsAllSub userExistFalg:0:' + usersName[x]);
-				  response_new.push({
-                    id: '0',
-                    date: usersName[x],
-                    content: 'Not update the report yet!'	 
-			      });
-				}
-		      }
-		      return callback(new Response(1, 'success', response_new));
+				  // for the user who had not completed the report in the department
+				  if (userExistFalg == '0') {
+				    console.log('reportModel-getReportsAllSub userExistFalg:0:' + usersName[x]);
+				    response_new.push({
+                      id: '0',
+                      date: usersName[x],
+                      content: 'Not update the report yet!'	 
+			        });
+			 	  }
+		        }
+		        return callback(new Response(1, 'success', response_new));
+		      });
 		    });
-		  });
-	  });
-	}); 
+	    });
+	  }); 
 	});
   };
   
@@ -427,7 +427,6 @@
 		  if (childOfKey[1] == 'superior_id') {
 			if (value == userId	) {
 			  subordinateId = childOfKey[0];
-			  
 			  console.log('reportModel-getSubordinateId subordinateId:' + subordinateId);					
 			}
 		  }	
@@ -437,6 +436,9 @@
   
   };
 	
+  // get all the reports for the department, but the manager should in the his boss's department,
+  // so the manger's report should not list in his team.
+  // if the manger in his team , then there will be a empty report in the main page, it is not reasonable
   exports.getReportsAll = function(userId, page, numOfPage, callback) {
     var client, end, start;
     client = utils.createClient();
@@ -452,7 +454,6 @@
 	//console.log('reportModel-getReportsAll end:' + end);
 	
 	var dateStr;
-
 	// init the dateStr, change the page will change the dateStr
 	if (page == '1') {
 		dateStr = getDateStr(new Date());	
@@ -521,22 +522,20 @@
 	  var usersNameList = [];
 	
       for (x in usersIdList) {	
-		
 		for (key in reply) {
 		  value = reply[key];
           childOfKey = key.split(":");
 		  
 		  if (childOfKey[1] == 'user_name') {
 			if (childOfKey[0] == usersIdList[x]	) {
-			  var userName = value;
-			  
+			  var userName = value;  
 			  usersNameList.push(userName);
 			  console.log('reportModel-getUsersNameList userName:' + userName);					
 			}
 		  }	
 		}
 	  }
-		return callback(usersNameList);
+	  return callback(usersNameList);
 	});	
 	
   }
@@ -566,7 +565,8 @@
 		  response.push({
                 id: userId,
 				name: userName,
-                date: userName,   //date: dateStr, // change the dateStr to userName in the main page
+                date: userName,   //date: dateStr, 
+				                  // change the dateStr to userName in the main page
                 content: content	
 		  });
 		}
@@ -585,7 +585,6 @@
         var users;
 		
 		// get the report's content
-		
 		var childOfKey, key, value;
 		for (key in reply) {
 		  value = reply[key];
@@ -593,27 +592,25 @@
 			
           if (childOfKey[1] == "date") {
 			if (value == dateStr) {
-			    var reportId = childOfKey[0];
-				
-				console.log('reportModel-getReport reportId:' + reportId);
+			  var reportId = childOfKey[0];
+			  console.log('reportModel-getReport reportId:' + reportId);
+			  return client.hgetall("userid:" + userId + ":reports", function(err, reply) {
+			    if (err) {
+  				  return utils.showDBError(callback, client);
+				}
 
-				return client.hgetall("userid:" + userId + ":reports", function(err, reply) {
-					if (err) {
-						return utils.showDBError(callback, client);
-					}
-
-					for (key in reply) {
-						value = reply[key];
-						childOfKey = key.split(":");
-						if (childOfKey[1] == "content") {
-							if (childOfKey[0] == reportId) {
-								content = value;
-								console.log('getReport content:' + content);
-								return content;
-							}	
-						}
-					}
-				});	
+				for (key in reply) {
+		  		  value = reply[key];
+			  	  childOfKey = key.split(":");
+				  if (childOfKey[1] == "content") {
+					if (childOfKey[0] == reportId) {
+					  content = value;
+					  console.log('getReport content:' + content);
+					  return content;
+					}	
+				  }
+				}
+			  });	
 			}
           }		  
         }	
