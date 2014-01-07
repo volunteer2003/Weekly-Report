@@ -90,7 +90,7 @@
 	
 	console.log('utils-getDateStr1 page:' + page);
 	
-	day_new.setDate(date.getDate() - date.getDay() + (page - 1)*7);
+	day_new.setDate(date.getDate() - date.getDay() + 4 + (page - 1)*7);
 	year = day_new.getFullYear();
     month = day_new.getMonth() + 1;
 	day = day_new.getDate();
@@ -111,26 +111,14 @@
       year = date.getFullYear();
       month = date.getMonth() + 1;
 	  day = date.getDate();
-      
-	  //return "" + year + "-" + month + "-" + day;
 	  
-	  // calc the first day of the week
+	  // calc the fourth day of the week
 	  day_new.setDate(date.getDate() - date.getDay() + 4);
 	  year_first = day_new.getFullYear();
       month_first = day_new.getMonth() + 1;
 	  day_first = day_new.getDate();
 	  console.log('utils-getDateStr:' + year_first + "-" + month_first + "-" + day_first);
 	  return "" + year_first + "-" + month_first + "-" + day_first;
-	  
-	  // calc the last day of the week
-	  day_new.setDate(day_new.getDate() + 6);
-	  year_last = day_new.getFullYear();
-      month_last = day_new.getMonth() + 1;
-	  day_last = day_new.getDate();
-	  //return "" + year_last + "-" + month_last + "-" + day_last;
-	  
-	  return "" + year_first + "-" + month_first + "-" + day_first + " to " + year_last + "-" + month_last + "-" + day_last;
-	   
     };
    
 }).call(this);

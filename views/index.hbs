@@ -42,12 +42,17 @@
 		
 </div>
 <div class="pagination">
-<table border="0">
-	<tr>
-		<td><button class="btn btn-mini weekPre" title="上一页" data-bind="visible: currentPage()<1">&lt;&lt;</button></td>
-		<td>&nbsp;&nbsp;<i class="icon-calendar"></i> {{dateStr}} &nbsp;&nbsp;</td>
-		<td><button class="btn btn-mini weekNext" title="下一页">&gt;&gt;</button></td>		
-	</tr>
+
+<table border="0" width="100%">
+  <tbody> 
+   <tr>
+	  <td width="70%">&nbsp;</td>
+  	  <td width="50px"><button class="btn btn-mini weekPre" title="上一页" data-bind="visible: currentPage()<1">&lt;&lt;</button></td>
+	  <td width="100px"><i class="icon-calendar"></i><span data-bind="text: currentWeek()"></span></td>
+	  <td width="50px"><button class="btn btn-mini weekNext" title="下一页">&gt;&gt;</button></td>		
+    <td width="10%">&nbsp;</td>
+	 </tr>
+  <tbody>
 </table>	
 </div>
 

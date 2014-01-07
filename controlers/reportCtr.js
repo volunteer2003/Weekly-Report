@@ -107,6 +107,7 @@
       check(year).notNull().isNumeric().len(4, 4);
       check(months).notNull().isNumeric().len(1, 2);
       //check(date).notNull().isNumeric().len(1, 2);
+	  console.log('reportCtr-upadte');
       return reportModel.updateReport(userId, content, dateStr, function(response) {
         return res.send(response);
       });

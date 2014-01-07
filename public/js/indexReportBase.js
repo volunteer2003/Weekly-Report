@@ -17,11 +17,53 @@
       return pageNum;
     });
     self.currentPage = ko.observable(1);
+	
+	var date = getDateStr(new Date());
+	self.currentWeek = ko.observable(date);
+	
     return self;
   };
 
   NUMOFPAGE = 10;
+  
+  getDateStr1 = function(date, page) {
+	var month, today, year, day;
 
+	date = new Date();
+	day_new = new Date();
+	
+	console.log('indexReportBase-getDateStr1 page:' + page);
+	
+	day_new.setDate(date.getDate() - date.getDay() + 4 + (page - 1)*7);
+	year = day_new.getFullYear();
+    month = day_new.getMonth() + 1;
+	day = day_new.getDate();
+	console.log('indexReportBase-getDateStr1 return: ' + year + '-' + month + '-' + day);	
+		
+	return "" + year + "-" + month + "-" + day;
+  }
+  
+  getDateStr = function(date) {
+      var month, today, year, day;
+	  var month_first, day_first, year_first; // for calc the first day and the last day of the week
+	  var month_last, day_last, year_last;
+	  
+	  date = new Date();
+      day = new Date();
+	  day_new = new Date();
+      year = date.getFullYear();
+      month = date.getMonth() + 1;
+	  day = date.getDate();
+      
+	  // calc the fourth day of the week
+	  day_new.setDate(date.getDate() - date.getDay() + 4);
+	  year_first = day_new.getFullYear();
+      month_first = day_new.getMonth() + 1;
+	  day_first = day_new.getDate();
+	  console.log('indexReportBase-getDateStr:' + year_first + "-" + month_first + "-" + day_first);
+	  return "" + year_first + "-" + month_first + "-" + day_first;  
+    };
+  
   getReports = function(userId) {
 	console.log('getReports userId:' + userId);
     var data;
@@ -40,6 +82,7 @@
       if (response.state === 0) {
         return;
       }
+	  console.log('indexReportBase-getReports currentPage:' + reportvm.currentPage());
       return reportvm.reports(response.data);
     });
   };
@@ -88,6 +131,8 @@
   window.gotoPage = function(page) {
     console.log('window.gotoPage :' + page);
     reportvm.currentPage(page);
+	var date = getDateStr1(new Date(), page); 
+	reportvm.currentWeek(date);
     return getReports(reportvm.userId());
   };
 

@@ -87,7 +87,7 @@
  exports.updateReport = function(userId, content, dateStr, callback) {
     var client;
     client = utils.createClient();
-	
+	console.log('reportModel-updateReport');
 	// get the reportId first
 	return client.hgetall("userid:" + userId + ":reports", function(err, reply) {
         var users;
@@ -107,9 +107,11 @@
 			    var reportId = childOfKey[0];
 				
 				return client.hmset("userid:" + userId + ":reports", "" + reportId + ":date", dateStr, "" + reportId + ":content", content, function(err, reply) {
+				
 				  if (err) {
 					return utils.showDBError(callback, client);
 				  }
+				  
 				  return getDepartmentId(userId, function(departmentId) {
 					// record the report in this week's table for the show in main page
 					return getUserName(userId, function(userName){
@@ -119,6 +121,7 @@
 						}
 		 
 						client.quit();
+						console.log('reportModel-updateReport success');
 						return callback(new Response(1, 'success', reply));
 					  });
 					});	
@@ -341,7 +344,7 @@
 	
     end = (numOfPage * page) - 1;
 	//console.log('reportModel-getReportsAll userId:' + userId);
-	console.log('reportModel-getReportsAll page1111111111111111111111111111111111111111111111111111111111111:' + page);
+	console.log('reportModel-getReportsAll page:' + page);
 	//console.log('reportModel-getReportsAll numOfPage:' + numOfPage);
 	//console.log('reportModel-getReportsAll end:' + end);
 	
@@ -363,8 +366,7 @@
 	  return getColleagues(departmentId, function(usersIdList) {	
 	    console.log('reportModel-getReportsAll usersIdList:' + usersIdList);
 		  return getUsersNameList(usersIdList, function(usersNameList) {
-		    console.log('reportModel-getReportsAll usersNameList:' + usersNameList);
-		    
+		    console.log('reportModel-getReportsAll usersNameList:' + usersNameList); 
 			return getReportsWeek(departmentId, dateStr, function(response) {
 		      // need to sequence the userLists to show in the main page
 		      var usersName = usersNameList.sort();
@@ -567,6 +569,7 @@
 			}
 		  }	
 		}
+		console.log('reportModel-getDepartmentId: May be the user is admin who do not has the departmentId');
 	});	
   };
   
