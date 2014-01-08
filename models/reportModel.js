@@ -8,7 +8,7 @@
 
   utils = require("../utils");
 
-  var content_template = "<H1>ABC123</H1>";
+  var content_template = "<H4>Plans:</H4><H4>Progress:</H4><H4>Problems:</H4>";
 	
   exports.createReport = function(userId, content, dateStr, callback) {
     var client;
