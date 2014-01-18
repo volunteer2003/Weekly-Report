@@ -7,7 +7,7 @@ Open SOurce Weekly Report System, it is useful for you team to share the process
 2. Role-Based Access Control, every has there authorith, get the available info.
 3. Base on Node.sj, one light weight web system
 
-Enjoy it.
+Enjoy it!
 
 BTW, the initial code is forked from WalterShe/dailyReport
 
