@@ -4,7 +4,7 @@
  */
 
 var express = require('express')
-  , http = require('http')
+//  , http = require('http')
   , routeProfile = require('./routes/ruteProfile')
   , path = require('path')
   , redis = require("redis")
@@ -12,20 +12,20 @@ var express = require('express')
   , appport = require('./config').app.port
   , sessiondbconfig = require('./config').sessiondb;
 
-//var https = require('https');
-//var fs = require('fs');
+var https = require('https');
+var fs = require('fs');
   
-//var hskey = fs.readFileSync('./keys/hacksparrow-key.pem');
-//var hscert = fs.readFileSync('./keys/hacksparrow-cert.pem');
+var hskey = fs.readFileSync('./keys/hacksparrow-key.pem');
+var hscert = fs.readFileSync('./keys/hacksparrow-cert.pem');
 
-//var options = {
-//    key: hskey,
-//    cert: hscert
-//};
+var options = {
+    key: hskey,
+    cert: hscert
+};
 
-//var fs = require('fs');
-//var accessLog = fs.createWriteStream('access.log', {flags: 'a'});
-//var errorLog = fs.createWriteStream('error.log', {flags: 'a'});
+var fs = require('fs');
+var accessLog = fs.createWriteStream('access.log', {flags: 'a'});
+var errorLog = fs.createWriteStream('error.log', {flags: 'a'});
 
 var app = express();
 var redisClient = redis.createClient();
@@ -34,12 +34,12 @@ redisClient.on("error", function(err) {
 });
 
 // all environments
-app.set('port', appport || process.env.PORT || 80);
+app.set('port', appport || process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'hbs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
-//app.use(express.logger({stream: accessLog}));
+app.use(express.logger({stream: accessLog}));
 app.use(express.compress());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
@@ -62,7 +62,7 @@ if ('development' == app.get('env')) {
 }
 
 routeProfile.createRutes(app);
-http.createServer(app).listen(app.get('port'), function(){
-//https.createServer(options,app).listen(app.get('port'), function(){
+
+https.createServer(options,app).listen(app.get('port'), function(){
   console.log('Express https server listening on port ' + app.get('port'));
 });
